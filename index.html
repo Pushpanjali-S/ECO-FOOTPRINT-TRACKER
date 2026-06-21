@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTracker - Antigravity Assistant</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fafafa;
+            color: #222;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #1b5e20;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        .insight-badge {
+            background: #e8f5e9;
+            color: #1b5e20;
+            padding: 12px;
+            border-left: 4px solid #1b5e20;
+            margin-top: 12px;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>EcoTracker Assistant</h1>
+    <div class="card">
+        <h2>1. Assess Carbon Factors</h2>
+        <div class="input-group">
+            <label for="diet">Primary Dietary Preference</label>
+            <select id="diet">
+                <option value="heavy-meat">Frequent Meat Diet</option>
+                <option value="low-meat">Plant-Forward / Low Meat</option>
+                <option value="vegetarian">Vegetarian</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="transport">Weekly Vehicle Mileage</label>
+            <input type="number" id="transport" min="0" value="0">
+        </div>
+        <button onclick="evaluateCarbonImpact()">Calculate & Strategy</button>
+    </div>
+    <div class="card" id="results" style="display:none;">
+        <h2>Insights & Strategic Paths</h2>
+        <p>Calculated Footprint: <strong id="score">0</strong> metric tons CO2e/year.</p>
+        <div id="action-items"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
