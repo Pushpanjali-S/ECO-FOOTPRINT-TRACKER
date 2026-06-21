@@ -323,7 +323,6 @@
 <body>
 
     <div class="layout-wrapper">
-        <!-- Persistent Side Navigation Panel -->
         <nav>
             <div class="brand">🌱 ClimaSphere OS</div>
             <ul>
@@ -334,10 +333,8 @@
             </ul>
         </nav>
 
-        <!-- Main Window Stage -->
         <div class="workspace">
 
-            <!-- MODULE 1: Live Interactive Sandbox Simulator -->
             <div class="view-panel active" id="view-sandbox">
                 <h1>Dynamic Footprint Simulator</h1>
                 <p class="panel-desc">Slide environmental variables to see immediate footprint vector calculations in
@@ -376,14 +373,12 @@
                 </div>
             </div>
 
-            <!-- MODULE 2: Structured Context-Driven Entry Wizard -->
             <div class="view-panel" id="view-wizard">
                 <h1>Precision Profile Audit</h1>
                 <p class="panel-desc">Complete the verification flow layers to update your historical tracking metrics
                     ledger.</p>
 
                 <div class="module-card" style="max-width: 550px; margin: 0 auto;">
-                    <!-- Step 1 View -->
                     <div class="wizard-step active" id="wiz-step-1">
                         <h3>[Step 1 of 2] Domestic Power Configurations</h3>
                         <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px;">Provide localized
@@ -392,7 +387,6 @@
                         <input type="number" class="input-box" id="wiz-power" value="80">
                         <button class="btn" onclick="navigateWizard(2)">Next Framework Step</button>
                     </div>
-                    <!-- Step 2 View -->
                     <div class="wizard-step" id="wiz-step-2">
                         <h3>[Step 2 of 2] Municipal Waste Infrastructure</h3>
                         <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px;">Provide local household
@@ -407,14 +401,12 @@
                 </div>
             </div>
 
-            <!-- MODULE 3: Gamified Action Tracking System -->
             <div class="view-panel" id="view-ledger">
                 <h1>Active Mitigation Tracker</h1>
                 <p class="panel-desc">Commit to physical habits below to scale active carbon mitigation factors in
                     real-time.</p>
                 <div class="grid-2">
                     <div id="ledger-pool">
-                        <!-- Items rendered via app.js template loop injections -->
                     </div>
                     <div>
                         <div class="realtime-ticker"
@@ -426,7 +418,6 @@
                 </div>
             </div>
 
-            <!-- MODULE 4: Historical Metrics Visualization Logs -->
             <div class="view-panel" id="view-analytics">
                 <h1>Historical Metrics Matrix</h1>
                 <p class="panel-desc">Monitors data logs and trend vectors mapped over progressive verification
@@ -434,7 +425,6 @@
                 <div class="module-card">
                     <h3>Quarterly Operational Baseline History</h3>
                     <div class="sparkline-container" id="sparkline-target">
-                        <!-- Rendered dynamically -->
                     </div>
                 </div>
             </div>
