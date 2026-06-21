@@ -4,8 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoPulse // Direct Carbon Analytics</title>
+    <title>Climatic AI // Intelligent Carbon Architecture</title>
     <style>
+        :root {
+            --bg: #090d0a;
+            --surface: #121814;
+            --surface-accent: #1a231d;
+            --primary: #22c55e;
+            --text: #f0f4f1;
+            --text-muted: #7a8c80;
+            --border: #243329;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -13,41 +23,97 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0b130e;
-            color: #e3ede6;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
 
-        .app-window {
-            background: #14221a;
-            border: 1px solid #233b2e;
-            border-radius: 20px;
+        .app-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
             width: 100%;
-            max-width: 480px;
-            padding: 32px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            padding: 36px;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #8ba394;
-            font-size: 14px;
+        /* Progress Indicator Grid */
+        .progress-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
             margin-bottom: 32px;
         }
 
-        .field-box {
+        .step-dot {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+        }
+
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .desc {
+            color: var(--text-muted);
+            font-size: 14px;
             margin-bottom: 24px;
+        }
+
+        .option-card {
+            background: var(--surface-accent);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+        }
+
+        .option-card.selected {
+            background: #052e16;
+            border-color: var(--primary);
+        }
+
+        .option-card strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .option-card span {
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
         label {
@@ -56,116 +122,159 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #8ba394;
+            color: var(--text-muted);
             margin-bottom: 8px;
         }
 
-        select,
         input {
             width: 100%;
-            background: #1c2f24;
-            border: 1px solid #2a4737;
+            background: var(--surface-accent);
+            border: 1px solid var(--border);
             border-radius: 10px;
             padding: 14px;
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s ease;
-        }
-
-        select:focus,
-        input:focus {
-            border-color: #4ade80;
-        }
-
-        .action-btn {
-            background: #22c55e;
-            color: #052e16;
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            border-radius: 10px;
-            padding: 16px;
-            width: 100%;
-            cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background: #4ade80;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-        }
-
-        .output-panel {
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px dashed #2a4737;
-            display: none;
-        }
-
-        .total-display {
-            font-size: 48px;
-            font-weight: 800;
-            color: #4ade80;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .total-unit {
-            font-size: 13px;
-            color: #8ba394;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
             margin-bottom: 20px;
         }
 
-        .strategy-list {
-            list-style: none;
+        input:focus {
+            border-color: var(--primary);
         }
 
-        .strategy-item {
-            background: #1c2f24;
-            border-left: 3px solid #22c55e;
-            padding: 12px 16px;
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #052e16;
+        }
+
+        .btn-primary:hover {
+            background: #4ade80;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-accent);
+        }
+
+        /* Dynamic Result Screen CSS */
+        .score-hero {
+            text-align: center;
+            padding: 24px 0;
+            border-bottom: 1px dashed var(--border);
+            margin-bottom: 24px;
+        }
+
+        .score-num {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .insight-pill {
+            background: var(--surface-accent);
+            border-left: 4px solid var(--primary);
+            padding: 14px;
             border-radius: 0 8px 8px 0;
             font-size: 14px;
             line-height: 1.5;
-            color: #cbd5e1;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="app-window">
-        <h1>EcoPulse</h1>
-        <p class="subtitle">Personal carbon footprint estimation engine</p>
-
-        <div class="field-box">
-            <label for="userDiet">Diet Framework</label>
-            <select id="userDiet">
-                <option value="high-protein">Omnivore (Heavy Meat)</option>
-                <option value="balanced">Balanced (Low Meat)</option>
-                <option value="plant-based">Plant-Based / Vegan</option>
-            </select>
+    <div class="app-container">
+        <div class="progress-bar">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
         </div>
 
-        <div class="field-box">
-            <label for="userTransit">Weekly Drive Distance (Miles)</label>
-            <input type="number" id="userTransit" min="0" value="0">
+        <div class="step-panel active" id="step1">
+            <h2>Select Lifestyle Persona</h2>
+            <p class="desc">This configures the core decision pathways of the AI engine.</p>
+
+            <div class="option-card selected" onclick="selectDiet(this, 'heavy-meat')">
+                <strong>Urban Omnivore</strong>
+                <span>Regular meat consumption, mixed daily transit profiles.</span>
+            </div>
+            <div class="option-card" onclick="selectDiet(this, 'low-meat')">
+                <strong>Conscious Flexitarian</strong>
+                <span>Heavy emphasis on plant alternatives, minimal poultry/fish.</span>
+            </div>
+            <div class="option-card" onclick="selectDiet(this, 'plant-based')">
+                <strong>Zero-Impact Path</strong>
+                <span>Strict plant-based routine, focused lifestyle footprints.</span>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 16px;" onclick="navigateStep(2)">Continue to Metrics</button>
         </div>
 
-        <button class="action-btn" onclick="runCarbonEngine()">Process Analytics</button>
+        <div class="step-panel" id="step2">
+            <h2>Resource Tracking</h2>
+            <p class="desc">Provide active variables for calculation.</p>
 
-        <div class="output-panel" id="outputModule">
-            <div class="total-display" id="finalMetric">0.00</div>
-            <div class="total-unit">Metric Tons CO2e / Year</div>
-            <ul class="strategy-list" id="strategyTarget"></ul>
+            <label for="milesInput">Weekly Vehicle Transit (Miles)</label>
+            <input type="number" id="milesInput" min="0" value="0">
+
+            <label for="utilityInput">Monthly Electric Resource Grid ($)</label>
+            <input type="number" id="utilityInput" min="0" value="0">
+
+            <div class="btn-group">
+                <button class="btn-secondary" onclick="navigateStep(1)">Back</button>
+                <button class="btn-primary" onclick="processAnalysisOutput()">Compile Analytics</button>
+            </div>
+        </div>
+
+        <div class="step-panel" id="step3">
+            <h2>Your Carbon Ledger</h2>
+            <p class="desc">Personalized strategies computed successfully.</p>
+
+            <div class="score-hero">
+                <div class="score-num" id="metricOutput">0.00</div>
+                <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">
+                    Metric Tons CO2e / Year</div>
+            </div>
+
+            <div id="insightsTarget"></div>
+
+            <button class="btn-secondary" style="width: 100%; margin-top: 16px;" onclick="resetWorkflow()">Reset
+                Audit</button>
         </div>
     </div>
 

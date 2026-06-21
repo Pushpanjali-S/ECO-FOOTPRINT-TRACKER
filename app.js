@@ -1,43 +1,90 @@
-// Unique calculation coefficients derived from regional averages
-const ECO_FACTORS = {
-    dietBaselines: { "high-protein": 3.0, "balanced": 2.0, "plant-based": 1.4 },
-    transitMultiplier: 0.00041 // Metric tons of CO2 per mile annualized
+// State management variables for the user flow
+let currentStep = 1;
+let selectedDietContext = "heavy-meat";
+
+const STRATEGY_DATA = {
+    dietFactors: { "heavy-meat": 3.2, "low-meat": 2.1, "plant-based": 1.3 },
+    mileCoefficient: 0.00041,
+    utilityCoefficient: 0.0058
 };
 
-function runCarbonEngine() {
-    // Capture user interface state values
-    const selectedDiet = document.getElementById('userDiet').value;
-    const weeklyMiles = parseFloat(document.getElementById('userTransit').value) || 0;
+function navigateStep(targetStep) {
+    // Hide current panel step active state
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    document.getElementById(`dot${currentStep}`).classList.remove('active');
 
-    // Execute distinct calculation parameters
-    const dietImpact = ECO_FACTORS.dietBaselines[selectedDiet];
-    const transitImpact = weeklyMiles * 52 * ECO_FACTORS.transitMultiplier;
-    const aggregateOutput = (dietImpact + transitImpact).toFixed(2);
+    // Transition state
+    currentStep = targetStep;
 
-    // Render metrics seamlessly to interface views
-    document.getElementById('finalMetric').innerText = aggregateOutput;
-    document.getElementById('outputModule').style.display = 'block';
+    // Show target step view parameters
+    document.getElementById(`step${currentStep}`).classList.add('active');
+    document.getElementById(`dot${currentStep}`).classList.add('active');
 
-    // Clear previous list elements completely
-    const summaryContainer = document.getElementById('strategyTarget');
-    summaryContainer.innerHTML = '';
-
-    // Context-sensitive dynamic decision logic arrays
-    if (weeklyMiles > 120) {
-        appendStrategyItem("Transit Vector: Trimming vehicle usage by just 20 miles a week shifts your overall profile down dramatically.");
-    }
-    if (selectedDiet === "high-protein") {
-        appendStrategyItem("Dietary Vector: Integrating meat-free alternatives for lunches drops manufacturing resource dependencies.");
-    }
-    if (weeklyMiles <= 120 && selectedDiet !== "high-protein") {
-        appendStrategyItem("Optimization Core: Baseline profile looks fantastic. Focus on secondary goals like adjusting home water heaters to 120°F.");
+    // Light up previous steps too
+    for (let i = 1; i <= 3; i++) {
+        if (i <= currentStep) {
+            document.getElementById(`dot${i}`).classList.add('active');
+        } else {
+            document.getElementById(`dot${i}`).classList.remove('active');
+        }
     }
 }
 
-function appendStrategyItem(messageText) {
-    const contextList = document.getElementById('strategyTarget');
-    const listItem = document.createElement('li');
-    listItem.className = 'strategy-item';
-    listItem.innerText = messageText;
-    contextList.appendChild(listItem);
+function selectDiet(element, contextValue) {
+    // Remove selected state UI styles across alternatives
+    const cards = document.querySelectorAll('.option-card');
+    cards.forEach(card => card.classList.remove('selected'));
+
+    // Assign active element states
+    element.classList.add('selected');
+    selectedDietContext = contextValue;
+}
+
+function processAnalysisOutput() {
+    const totalMiles = parseFloat(document.getElementById('milesInput').value) || 0;
+    const totalUtilities = parseFloat(document.getElementById('utilityInput').value) || 0;
+
+    // Multi-variable scoring formulas
+    const baselineDiet = STRATEGY_DATA.dietFactors[selectedDietContext];
+    const annualTransit = totalMiles * 52 * STRATEGY_DATA.mileCoefficient;
+    const annualUtilities = totalUtilities * 12 * STRATEGY_DATA.utilityCoefficient;
+
+    const compositeScore = (baselineDiet + annualTransit + annualUtilities).toFixed(2);
+
+    // Update Metrics Data Fields
+    document.getElementById('metricOutput').innerText = compositeScore;
+
+    // Compute Context Dynamic Decisions
+    const container = document.getElementById('insightsTarget');
+    container.innerHTML = ''; // Sanitize container bounds
+
+    let actionList = [];
+    if (totalMiles > 140) {
+        actionList.push("🚗 Transit Vector: High weekly routing context detected. Offloading 20% of drive volume yields dramatic footprint scaling decreases.");
+    }
+    if (totalUtilities > 100) {
+        actionList.push("⚡ Grid Power Vector: Shifting high-draw utility loads outside peak grid usage windows optimizes dynamic source loads.");
+    }
+    if (selectedDietContext === "heavy-meat") {
+        actionList.push("🥗 Agricultural Vector: Swapping out primary livestock proteins for alternative choices twice weekly removes immediate industrial resource footprints.");
+    }
+    if (actionList.length === 0) {
+        actionList.push("✨ System Optimization Clean: Baseline numbers check out securely. Focus environmental targets on secondary consumer waste workflows.");
+    }
+
+    actionList.forEach(text => {
+        const item = document.createElement('div');
+        item.className = 'insight-pill';
+        item.innerText = text;
+        container.appendChild(item);
+    });
+
+    // Push UI window execution layer forward
+    navigateStep(3);
+}
+
+function resetWorkflow() {
+    document.getElementById('milesInput').value = 0;
+    document.getElementById('utilityInput').value = 0;
+    navigateStep(1);
 }
